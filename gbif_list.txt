@@ -1,0 +1,309 @@
+begin
+
+truncate test.gbif_list;
+insert into test.gbif_list
+select distinct u.name, case u.`rank`
+					when 1 then 'karalystė'
+					when 2 then 'tipas'
+					when 3 then 'klasė'
+					when 4 then 'būrys'
+					when 5 then 'antšeimis'
+					when 6 then 'šeima'
+					when 7 then 'gentis'
+					when 8 then 'rūšis'
+					when 9 then 'porūšis'
+					when 10 then 'variatetas'
+					when 11 then 'forma'
+					else 'kita'
+				end `rank`
+from (
+SELECT ifnull(gc.c_name, gt.name) name, 
+				case gt.`rank`
+					when 'karalystė' then 1
+					when 'tipas' then 2
+					when 'klasė' then 3
+					when 'būrys' then 4
+					when 'antšeimis' then 5
+					when 'šeima' then 6
+					when 'gentis' then 7
+					when 'rūšis' then 8
+					when 'porūšis' then 9
+					when 'variatetas' then 10
+					when 'forma' then 11
+					else 12
+				end `rank` 
+	FROM Paplitimas.`GBIF_tree` gt 
+	left join base.x_GBIFtax gc on (gc.c_taxon_id = gt.`key`)
+	WHERE gt.familyKey = pgbifid and gt.`rank` = pgbiftyp
+union distinct
+SELECT ifnull(tc.c_name, 
+				case tt.name
+					when 'Superfamily unassigned' then 'Fungi (nepriskirti antšeimiui)'
+					when 'Not assigned' then 'Fungi (nepriskirti)' 
+					else tt.name
+				end) name, 
+				case tt.`rank`
+					when 'kingdom' then 1
+					when 'phylum' then 2
+					when 'class' then 3
+					when 'order' then 4
+					when 'superfamily' then 5
+					when 'family' then 6
+					when 'genus' then 7
+					when 'species' then 8
+					when 'subspecies' then 9
+					when 'variety' then 10
+					when 'form' then 11
+					else 12
+				end `rank` 
+	FROM col2013ac.`_taxon_tree` tt
+	left join base.x_col2013taxon tc on (tt.taxon_id=tc.c_taxon_id)
+	WHERE tt.`family` = pcolid and tt.`rank`= pcoltyp
+) u
+order by u.`rank`, u.name;
+
+truncate test.gbif_plist;
+insert into test.gbif_plist
+select distinct u.name, u.`rank`, ifnull(ugt.`key`,ugt2.`key`) id, 
+   ifnull(ifnull(ugcp.c_name, ugt.parent),ifnull(ugcp2.c_name, ugt2.parent)) parent, ifnull(ugt.parentKey,ugt2.parentKey) pid
+from test.gbif_list u
+left join base.x_GBIFtax ugc on (ugc.c_name = u.name)
+left join Paplitimas.`GBIF_tree` ugt on (ugc.c_taxon_id = ugt.`key` and ugc.c_taxon_id is not null)
+left join base.x_GBIFtax ugcp on (ugcp.c_taxon_id = ugt.parentKey)
+left join Paplitimas.`GBIF_tree` ugt2 on (ugt2.name = u.name and (ugc.c_taxon_id is null or ugc.c_taxon_id=ugt.`key`))
+left join base.x_GBIFtax ugcp2 on (ugcp2.c_taxon_id = ugt2.parentKey)
+where ugt.`key` is not null or ugt2.`key` is not null;
+
+truncate test.col_plist;
+insert into test.col_plist
+select distinct u.name, u.`rank`, ugt.taxon_id id, ifnull(ugcp.c_name, ugtp.name) parent, ugt.parent_id pid
+from test.gbif_list u
+left join base.x_col2013taxon ugc on (ugc.c_name = u.name)
+left join col2013ac.`_taxon_tree` ugt on (ugc.c_taxon_id = ugt.taxon_id)
+left join col2013ac.`_taxon_tree` ugtp on (ugtp.taxon_id = ugt.parent_id)
+left join base.x_col2013taxon ugcp on (ugcp.c_taxon_id = ugt.parent_id)
+where ugt.taxon_id is not null
+union distinct
+select distinct u.name, u.`rank`, ugt2.taxon_id id, ifnull(ugcp2.c_name, ugtp2.name) parent, ugt2.parent_id pid
+from test.gbif_list u
+left join base.x_col2013taxon ugc on (ugc.c_name = u.name)
+left join col2013ac.`_taxon_tree` ugt2 on (ugt2.name = u.name and ugc.c_taxon_id is null)
+left join col2013ac.`_taxon_tree` ugtp2 on (ugtp2.taxon_id = ugt2.parent_id)
+left join base.x_col2013taxon ugcp2 on (ugcp2.c_taxon_id = ugt2.parent_id)
+where ugt2.taxon_id is not null
+order by 1;
+
+truncate test.col_nlist;
+insert into test.col_nlist
+select * from (SELECT COUNT(*) AS nr, `name` 
+FROM test.`col_plist` GROUP BY `name` ORDER BY `name`) a 
+where a.nr>1;
+
+truncate test.gbif_nlist;
+insert into test.gbif_nlist
+select * from (SELECT COUNT(*) AS nr, `name` 
+FROM test.`gbif_plist` GROUP BY `name` ORDER BY `name`) a 
+where a.nr>1;
+
+truncate test.gbif_alist;
+insert into test.gbif_alist
+SELECT p.*, t.name alias, t.authors, t.`year` FROM test.`gbif_plist` p
+left join Paplitimas.GBIF_tree t on (p.id=t.`key`);
+
+truncate test.gbif_clist;
+insert into test.gbif_clist
+SELECT p.*, round((t.parents+0.5)/2,0)*2 sk, t.parents csk FROM test.`gbif_alist` p
+left join Paplitimas.GBIF_sk t on (p.id=t.gbif_id);
+
+truncate test.gbifcol_clist;
+insert into test.gbifcol_clist
+SELECT g.name, g.rank, g.id, g.parent, g.pid, ifnull(g.alias, t.name) alias, g.authors, g.`year`, g.sk, g.csk, c.id col_id, c.parent col_parent, c.pid col_pid, 
+   round((t.`number_of_children`+0.5)/2,0)*2 col_sk, t.`number_of_children` col_skt 
+FROM test.`gbif_clist` g
+left join test.col_plist c on (c.name=g.name)
+left join col2013ac.`_taxon_tree` t on (t.taxon_id=c.id);
+
+insert into test.gbifcol_clist
+SELECT c.name, c.rank, g.id, ifnull(g.parent, c.parent) parent, g.pid, ifnull(g.alias, t.name) alias, g.authors, g.`year`, g.sk, g.csk, c.id col_id, c.parent col_parent, c.pid col_pid, 
+   round((t.`number_of_children`+0.5)/2,0)*2 col_sk, t.`number_of_children` col_skt 
+FROM test.col_plist c
+left join test.`gbif_clist` g on (c.name=g.name)
+left join col2013ac.`_taxon_tree` t on (t.taxon_id=c.id)
+where g.id is null;
+
+truncate test.gbifcol_clist_childs;
+begin
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE n VARCHAR(255);
+  DECLARE a, b INT;
+    DECLARE cur1 CURSOR FOR select u.name, u.id, u.col_id
+	from test.gbifcol_clist u;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  OPEN cur1;
+
+  read_loop: LOOP
+    FETCH cur1 INTO n, a, b;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+    INSERT INTO test.gbifcol_clist_childs
+	select distinct u.name, a id, b col_id
+	from (
+	SELECT gtu.name, a id, b col_id
+		FROM Paplitimas.`GBIF_tree` gtu 
+		WHERE gtu.parentKey = a
+	union
+	SELECT ttu.name, a id, b col_id
+		FROM col2013ac.`_taxon_tree` ttu
+		WHERE ttu.parent_id = b
+	) u;
+  END LOOP;
+
+  CLOSE cur1;
+end;
+
+truncate test.gbifcol_clist_all;
+insert into test.gbifcol_clist_all
+SELECT gc.*, round((sum(if(s.name is not null,1,0))+0.5)/2,0)*2 sk_all, 
+  sum(if(s.name is not null,1,0)) skt_all,
+				ifnull(case t.`rank`
+					when 'karalystė' then 'karalystės'
+					when 'tipas' then 'tipo'
+					when 'klasė' then 'klasės'
+					when 'būrys' then 'būrio'
+					when 'antšeimis' then 'antšeimio'
+					when 'šeima' then 'šeimos'
+					when 'gentis' then 'genties'
+					when 'rūšis' then 'rūšies'
+					when 'porūšis' then 'porūšio'
+					when 'variatetas' then 'variateto'
+					when 'forma' then 'formos'
+					else t.`rank`
+				end,
+				case pgbiftyp
+					when 'karalystė' then 'karalystės'
+					when 'tipas' then 'karalystės'
+					when 'klasė' then 'tipo'
+					when 'būrys' then 'klasės'
+					when 'antšeimis' then 'būrio'
+					when 'šeima' then 'antšeimio'
+					when 'gentis' then 'šeimos'
+					when 'rūšis' then 'genties'
+					when 'porūšis' then 'rūšies'
+					when 'variatetas' then 'rūšies'
+					when 'forma' then 'rūšies'
+					else t.`rank`
+				end) `prank` 
+FROM test.gbifcol_clist gc
+left join test.gbifcol_clist_childs s on ((gc.id=s.id and gc.col_id=s.col_id) 
+	or (gc.id=s.id and gc.col_id is null and s.col_id is null)
+        or (gc.col_id=s.col_id and gc.id is null and s.id is null))
+left join Paplitimas.GBIF_tree t on (gc.pid=t.`key`)
+group by gc.id, gc.col_id;
+
+truncate test.`gbifcol_clist_all2_3`;
+insert into test.`gbifcol_clist_all2_3`
+select replace(ifnull(`rd`.`rd_title`,`a`.`name`),'_',' ') AS `lname`,`a`.`name` AS `name`,`a`.`id` AS `gbif_id`,`a`.`parent` AS `parent`,
+`a`.`alias` AS `alias`,ifnull(`a`.`authors`,'') AS `authors`,ifnull(`a`.`year`,'') AS `year`,`a`.`col_id` AS `col_id`,`a`.`col_skt` AS `csk`,
+`a`.`skt_all` AS `sk`,`a`.`sk_all` AS `sk2`,`a`.`prank` AS `pko`,`a`.`rank` AS `kas`,
+(case `a`.`rank` when 'karalystė' then 'karalystei' when 'tipas' then 'tipui' when 'klasė' then 'klasei' when 'būrys' then 'būriui' 
+when 'antšeimis' then 'antšeimiui' when 'šeima' then 'šeimai' when 'gentis' then 'genčiai' when 'rūšis' then 'rūšiai' else `a`.`rank` end) AS `kam`,
+(case `a`.`rank` when 'karalystė' then 'karalystės' when 'tipas' then 'tipo' when 'klasė' then 'klasės' when 'būrys' then 'būrio' 
+when 'antšeimis' then 'antšeimio' when 'šeima' then 'šeimos' when 'gentis' then 'genties' when 'rūšis' then 'rūšies' else `a`.`rank` end) AS `ko`,
+(case `a`.`rank` when 'karalystė' then 'tipas' when 'tipas' then 'klasė' when 'klasė' then 'būrys' when 'būrys' then 'šeima' when 'antšeimis' then 'šeima' 
+when 'šeima' then 'gentis' when 'gentis' then 'rūšis' when 'rūšis' then 'porūšis' else `a`.`rank` end) AS `ckas`,
+truncate(((`a`.`sk_all` - 1) / 50),0) AS `pg`,if((truncate(((`a`.`sk_all` - 1) / 50),0) = 0),`a`.`sk_all`,50) AS `kiek`,
+(case `a`.`rank` when 'karalystė' then 'Tipai' when 'tipas' then 'Klasės' when 'klasė' then 'Būriai' when 'būrys' then 'Šeimos' when 'antšeimis' then 'Šeimos' 
+when 'šeima' then 'Gentys' when 'gentis' then 'Rūšys' when 'rūšis' then 'Porūšiai' when 'porūšis' then '' when 'variatetas' then '' 
+when 'forma' then '' else `a`.`rank` end) AS `sectt`,
+concat((case `a`.`rank` when 'karalystė' then 'Tipų sąraš' when 'tipas' then 'Klasių sąraš' when 'klasė' then 'Būrių sąraš' when 'būrys' then 'Šeimų sąraš' 
+when 'antšeimis' then 'Šeimų sąraš' when 'šeima' then 'Genčių sąraš' when 'gentis' then 'Rūšių sąraš' when 'rūšis' then 'Porūšių sąraš' 
+when 'porūšis' then '' when 'variatetas' then '' when 'forma' then '' else `a`.`rank` end),
+if((truncate(((`a`.`sk_all` - 1) / 50),0) = 0),'as','o 1 dalis')) AS `sect`,
+if((truncate(((`a`.`sk_all` - 1) / 50),0) = 0),'',concat('[[{{#titleparts:{{PAGENAME}}|1}}/',
+truncate(((`a`.`sk_all` - 1) / 50),0),'|',(truncate(((`a`.`sk_all` - 1) / 50),0) + 1),' dalis]]')) AS `prev`,
+if((truncate(((`a`.`sk_all` - 1) / 50),0) = 0),'','[[{{#titleparts:{{PAGENAME}}|1}}/1|2 dalis]]') AS `nex`,
+(case `a`.`skt_all` when 0 then 'width=70%' when 1 then 'width=70%' else '' end) AS `wd`,`p`.`page_id` AS `page_id` 
+from ((test.`gbifcol_clist_all` `a` 
+left join `enciklopedija`.`encpage` `p` on(((`p`.`page_title` = replace(`a`.`name`,' ','_')) 
+	and (`p`.`page_namespace` = 0)))) 
+left join `enciklopedija`.`encredirect` `rd` on(((`rd`.`rd_from` = `p`.`page_id`) and (`rd`.`rd_namespace` = 0))));
+
+truncate test.gbifcol_clist_all2_pg2;
+insert into test.`gbifcol_clist_all2_pg2`
+select concat(`a`.`lname`,'/',`s`.`nr`) AS `pgname`,`a`.`lname` AS `lname`,`a`.`name` AS `name`,`a`.`parent` AS `parent`,`a`.`alias` AS `alias`,
+`a`.`authors` AS `authors`,`a`.`year` AS `year`,`a`.`col_id` AS `col_id`,`a`.`csk` AS `csk`,`a`.`sk` AS `sk`,`a`.`sk2` AS `sk2`,`a`.`pko` AS `pko`,
+`a`.`kas` AS `kas`,`a`.`kam` AS `kam`,`a`.`ko` AS `ko`,`a`.`ckas` AS `ckas`,`a`.`pg` AS `pg`,(`s`.`nr` * 50) AS `nuo`,
+if((`a`.`pg` = `s`.`nr`),(`a`.`sk2` - (`s`.`nr` * 50)),50) AS `kiek`,`a`.`sectt` AS `sectt`,
+concat((case `a`.`kas` when 'karalystė' then 'Tipų sąrašo ' when 'tipas' then 'Klasių sąrašo ' when 'klasė' then 'Būrių sąrašo ' when 'būrys' then 'Šeimių sąrašo ' 
+when 'antšeimis' then 'Šeimų sąrašo ' when 'šeima' then 'Genčių sąrašo ' when 'gentis' then 'Rūšių sąrašo ' when 'rūšis' then 'Porūšių sąrašo ' 
+else concat(`a`.`kas`,' ') end),(`s`.`nr` + 1),' dalis') AS `sect`,
+(case when (`s`.`nr` = 1) then '[[{{#titleparts:{{PAGENAME}}|1}}]]' else concat('[[{{#titleparts:{{PAGENAME}}|1}}/',(`s`.`nr` - 1),'|',`s`.`nr`,' dalis]]') end) AS `prev`,
+(case when (`s`.`nr` = `a`.`pg`) then '[[{{#titleparts:{{PAGENAME}}|1}}]]' 
+else concat('[[{{#titleparts:{{PAGENAME}}|1}}/',(`s`.`nr` + 1),'|',(`s`.`nr` + 2),' dalis]]') end) AS `nex`,
+`a`.`wd` AS `wd`,`a`.`page_id` AS `page_id` 
+from (test.`gbifcol_clist_all2_3` `a` 
+left join `Paplitimas`.`Skaiciai` `s` on(((`a`.`pg` >= `s`.`nr`) and (`s`.`nr` > 0)))) 
+where (`a`.`pg` > 0);
+
+truncate test.gbifcol_clist_all2_pg_ren;
+insert into test.gbifcol_clist_all2_pg_ren
+select concat(`a`.`name`,'/',`s`.`nr`) AS `name`,
+	concat(`a`.`lname`,'/',`s`.`nr`) AS `lname`,
+	concat('* [[',`a`.`name`,'/',`s`.`nr`,']] -- [[',`a`.`lname`,'/',`s`.`nr`,']]') AS `txt`
+from (((test.`gbifcol_clist_all2_3` `a` 
+left join `Paplitimas`.`Skaiciai` `s` on(((`a`.`pg` >= `s`.`nr`) and (`s`.`nr` > 0)))) 
+left join `enciklopedija`.`encpage` `ep` on(((`ep`.`page_title` = replace(concat(`a`.`lname`,if((`s`.`nr` = 0),'',concat('/',`s`.`nr`))),' ','_')) 
+and (`ep`.`page_namespace` = 0)))) 
+left join `enciklopedija`.`encredirect` `rd` on(((`rd`.`rd_from` = `ep`.`page_id`) and (`rd`.`rd_namespace` = 0)))) 
+where ((`a`.`pg` > 0) and (`a`.`lname` <> `a`.`name`) and isnull(`ep`.`page_id`));
+
+truncate test.gbifcol_nlist;
+insert into test.gbifcol_nlist 
+select `c`.`name` AS `name` from test.`col_nlist` `c` union select `g`.`name` AS `name` from test.`gbif_nlist` `g`;
+
+truncate test.gbifcol_nlist_2;
+insert into test.gbifcol_nlist_2 
+select `a`.`name` AS `name`,`p`.`page_id` AS `page_id` 
+from ((`test`.`gbifcol_nlist` `a` 
+left join `enciklopedija`.`encpage` `p` on(((`p`.`page_title` = replace(`a`.`name`,' ','_')) 
+and (`p`.`page_namespace` = 0)))) 
+left join `enciklopedija`.`encredirect` `rd` on(((`rd`.`rd_from` = `p`.`page_id`) and (`rd`.`rd_namespace` = 0))));
+
+truncate test.gbifcol_ndistinct;
+insert into test.gbifcol_ndistinct 
+select `c`.`page_id` AS `page_id`,`a`.`name` AS `name`,`a`.`rank` AS `rank`,`a`.`id` AS `id`,`a`.`parent` AS `parent`,`a`.`pid` AS `pid`,`a`.`alias` AS `alias`,
+`a`.`authors` AS `authors`,`a`.`year` AS `year`,`a`.`sk` AS `sk`,`a`.`csk` AS `csk`,`a`.`col_id` AS `col_id`,`a`.`col_parent` AS `col_parent`,`a`.`col_pid` AS `col_pid`,
+`a`.`col_sk` AS `col_sk`,`a`.`col_skt` AS `col_skt`,`a`.`sk_all` AS `sk_all`,`a`.`skt_all` AS `skt_all`,`a`.`prank` AS `prank` 
+from (test.`gbifcol_nlist_2` `c` 
+left join test.`gbifcol_clist_all` `a` on((`a`.`alias` = `c`.`name`)));
+
+truncate test.gbifcol_ndistinct_txt;
+insert into test.gbifcol_ndistinct_txt 
+select `g`.`name` AS `name`,concat("'''[[",`g`.`name`,"]]''' gali reikšti:~* ",
+	group_concat(distinct concat('{{Gref|',`g`.`name`,' (',`g`.`parent`,')}} – {{Gref|',`g`.`parent`,'}} ',`g`.`prank`,' gentis.') 
+	order by `g`.`parent` ASC separator '~* '),'~== Šaltiniai ==~{{Ref}}~{{Nuorodinis}}') AS `txt` 
+from `test`.`gbifcol_ndistinct` `g` 
+group by `g`.`name` order by `g`.`name`;
+
+truncate test.gbifcol_clist_all2_srit;
+insert into test.`gbifcol_clist_all2_srit` 
+select concat(`a`.`lname`,'/',`p`.`country`,if(((`s`.`nr` - 1) = 0),'',concat('/',(`s`.`nr` - 1)))) AS `name`,
+	concat(`a`.`name`,'/',`p`.`country`,if(((`s`.`nr` - 1) = 0),'',concat('/',(`s`.`nr` - 1)))) AS `lname`,
+	concat('* [[Sritis:',`a`.`lname`,'/',`p`.`country`,if(((`s`.`nr` - 1) = 0),'',concat('/',(`s`.`nr` - 1))),']]') AS `txt` 
+from ((`test`.`gbifcol_clist_all2_3` `a` 
+left join `Paplitimas`.`paplitimas` `p` on((`a`.`gbif_id` = `p`.`gbif_id`))) 
+left join `Paplitimas`.`Skaiciai` `s` on((`s`.`nr` <= (floor((`p`.`speciessyn` / 50)) + 1)))) 
+where ((`p`.`speciessyn` <> 0) and (`a`.`gbif_id` is not null));
+
+truncate test.gbifcol_clist_all2_srit_ren;
+insert into test.`gbifcol_clist_all2_srit_ren` 
+select `a`.`name` AS `name`,`a`.`lname` AS `lname`,
+	concat('* [[Sritis:',`a`.`lname`,']] --> [[Sritis:',`a`.`name`,']]') AS `txt` 
+from ((test.`gbifcol_clist_all2_srit` `a` 
+left join `enciklopedija`.`encpage` `ep` on(((`ep`.`page_title` = replace(`a`.`name`,' ','_')) and (`ep`.`page_namespace` = 800)))) 
+left join `enciklopedija`.`encredirect` `rd` on(((`rd`.`rd_from` = `ep`.`page_id`) and (`rd`.`rd_namespace` = 800)))) 
+where (`a`.`lname` <> `a`.`name`) and isnull(`ep`.`page_id`);
+
+end

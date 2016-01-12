@@ -1,0 +1,119 @@
+truncate ggetree.GGEtreesavybes;
+insert into ggetree.GGEtreesavybes
+select p.smw_id id, 'rūšis' stipas, 'karalystė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Rūšis_priklauso_karalystei'
+union
+select p.smw_id id, 'gentis' stipas, 'karalystė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Gentis_priklauso_karalystei'
+union
+select p.smw_id id, 'šeima' stipas, 'karalystė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Šeima_priklauso_karalystei'
+union
+select p.smw_id id, 'šeima' stipas, 'karalystė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='šeima_priklauso_karalystei'
+union
+select p.smw_id id, 'eilė' stipas, 'karalystė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Eilė_priklauso_karalystei'
+union
+select p.smw_id id, 'būrys' stipas, 'karalystė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Būrys_priklauso_karalystei'
+union
+select p.smw_id id, 'klasė' stipas, 'karalystė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Klasė_priklauso_karalystei'
+union
+select p.smw_id id, 'skyrius' stipas, 'karalystė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Skyrius_priklauso_karalystei'
+union
+select p.smw_id id, 'tipas' stipas, 'karalystė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Tipas_priklauso_karalystei'
+union
+select p.smw_id id, 'rūšis' stipas, 'tipas' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Rūšis_priklauso_tipui'
+union
+select p.smw_id id, 'gentis' stipas, 'tipas' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Gentis_priklauso_tipui'
+union
+select p.smw_id id, 'šeima' stipas, 'tipas' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Šeima_priklauso_tipui'
+union
+select p.smw_id id, 'šeima' stipas, 'tipas' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='šeima_priklauso_tipui'
+union
+select p.smw_id id, 'eilė' stipas, 'tipas' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Eilė_priklauso_tipui'
+union
+select p.smw_id id, 'būrys' stipas, 'tipas' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Būrys_priklauso_tipui'
+union
+select p.smw_id id, 'klasė' stipas, 'tipas' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Klasė_priklauso_tipui'
+union
+select p.smw_id id, 'rūšis' stipas, 'skyrius' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Rūšis_priklauso_skyriui'
+union
+select p.smw_id id, 'gentis' stipas, 'skyrius' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Gentis_priklauso_skyriui'
+union
+select p.smw_id id, 'šeima' stipas, 'skyrius' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Šeima_priklauso_skyriui'
+union
+select p.smw_id id, 'šeima' stipas, 'skyrius' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='šeima_priklauso_skyriui'
+union
+select p.smw_id id, 'eilė' stipas, 'skyrius' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Eilė_priklauso_skyriui'
+union
+select p.smw_id id, 'būrys' stipas, 'skyrius' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Būrys_priklauso_skyriui'
+union
+select p.smw_id id, 'klasė' stipas, 'skyrius' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Klasė_priklauso_skyriui'
+union
+select p.smw_id id, 'rūšis' stipas, 'klasė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Rūšis_priklauso_klasei'
+union
+select p.smw_id id, 'gentis' stipas, 'klasė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Gentis_priklauso_klasei'
+union
+select p.smw_id id, 'šeima' stipas, 'klasė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Šeima_priklauso_klasei'
+union
+select p.smw_id id, 'šeima' stipas, 'klasė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='šeima_priklauso_klasei'
+union
+select p.smw_id id, 'eilė' stipas, 'klasė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Eilė_priklauso_klasei'
+union
+select p.smw_id id, 'būrys' stipas, 'klasė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Būrys_priklauso_klasei'
+union
+select p.smw_id id, 'rūšis' stipas, 'eilė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Rūšis_priklauso_eilei'
+union
+select p.smw_id id, 'gentis' stipas, 'eilė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Gentis_priklauso_eilei'
+union
+select p.smw_id id, 'šeima' stipas, 'eilė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Šeima_priklauso_eilei'
+union
+select p.smw_id id, 'šeima' stipas, 'eilė' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='šeima_priklauso_eilei'
+union
+select p.smw_id id, 'rūšis' stipas, 'būrys' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Rūšis_priklauso_būriui'
+union
+select p.smw_id id, 'gentis' stipas, 'būrys' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Gentis_priklauso_būriui'
+union
+select p.smw_id id, 'šeima' stipas, 'būrys' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='šeima_priklauso_būriui'
+union
+select p.smw_id id, 'šeima' stipas, 'būrys' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Šeima_priklauso_būriui'
+union
+select p.smw_id id, 'rūšis' stipas, 'šeima' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Rūšis_priklauso_šeimai'
+union
+select p.smw_id id, 'gentis' stipas, 'šeima' otipas from enciklopedija.encsmw_ids p
+where p.smw_title='Gentis_priklauso_šeimai'
+

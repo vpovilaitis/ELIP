@@ -1,0 +1,54 @@
+SELECT a.*, l.*
+FROM ggetree.ggeabc a 
+left join test.abc abc1 on a.abc=abc1.abc
+left join ggetree.ggelist l on l.o_title=a.o_title and l.s_title like abc1.abc2
+where a.sk>100 and a.o_title='Anthracoideaceae'
+
+
+SELECT l.o_title, l.stipas, abc1.abc&&abc.abc abc, count(1) sk
+FROM ggetree.ggeabc a 
+left join test.abc abc1 on a.abc=abc1.abc
+left join ggetree.ggelist l on l.o_title=a.o_title and l.s_title like abc1.abc2
+LEFT join test.abc abc on l.s_title like abc1.abc&&abc.abc3
+where a.sk>100 and a.o_title='Anthracoideaceae'
+
+
+truncate ggetree.gge2abc;
+insert into ggetree.gge2abc
+SELECT l.o_title, l.stipas, abc1.abc, substr(concat(abc1.abc,abc2.abc3),1,2) rabc, count(1) sk
+FROM ggetree.ggeabc a 
+left join test.abc abc1 on a.abc=abc1.abc
+left join ggetree.ggelist l on l.o_title=a.o_title and l.stipas=a.stipas and l.s_title like abc1.abc2
+LEFT join test.abc abc2 on l.s_title like concat(abc1.abc,abc2.abc3)
+where a.sk>100 
+group by l.o_title, l.stipas, abc1.abc,abc2.abc3;
+
+truncate ggetree.gge2pg;
+insert into ggetree.gge2pg
+select a.o_title, a.stipas, a.abc, a.rabc, a.sk, pg.ska + sum(case when isnull(b.sk) then 0 else b.sk end) ska,
+ (pg.ska + sum(case when isnull(b.sk) then 0 else b.sk end)) div 50 pg
+from ggetree.gge2abc a
+left join ggetree.gge2abc b on b.o_title=a.o_title and b.stipas=a.stipas and b.abc=a.abc and b.rabc<a.rabc
+left join ggetree.ggepg pg on pg.o_title=a.o_title and pg.stipas=a.stipas and pg.abc=a.abc 
+group by a.o_title, a.stipas, a.abc, a.rabc, a.sk, pg.ska;
+
+truncate ggetree.gge2sk;
+insert into ggetree.gge2sk
+select a.o_title, a.stipas, a.abc, sum(a.sk) kiek, group_concat(concat(a.rabc,':',a.pg) order by a.rabc asc separator ',') rabc 
+from ggetree.gge2pg a
+group by a.o_title, a.stipas, a.abc;
+
+SELECT * 
+FROM  `ggepg` 
+WHERE  `o_title` =  'Gyvūnai'
+AND  `stipas` LIKE  'gentis'
+AND  `ska` <9000
+ORDER BY  `ska` DESC 
+LIMIT 0 , 1
+
+SELECT * 
+FROM  `gge2pg` 
+WHERE  `o_title` =  'Gyvūnai'
+AND  `stipas` LIKE  'gentis'
+AND  `abc` LIKE  'B'
+LIMIT 0 , 30

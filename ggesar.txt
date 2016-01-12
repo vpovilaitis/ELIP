@@ -1,0 +1,80 @@
+begin
+
+truncate ggetree.ggelist_temp;
+insert into ggetree.ggelist_temp
+SELECT distinct replace(s.smw_title,'_',' ') s_title, replace(o.smw_title,'_',' ') o_title, es.stipas, es.otipas 
+FROM ggetree.GGEtreesavybes es
+left join enciklopedija.encsmw_rels2 r on es.id=r.p_id
+left join enciklopedija.encsmw_ids s on s.smw_id=r.s_id
+left join enciklopedija.encsmw_ids o on o.smw_id=r.o_id
+union distinct
+SELECT distinct replace(rd.s_title,'_',' ') s_title, replace(o.smw_title,'_',' ') o_title, es.stipas, es.otipas 
+FROM ggetree.GGEtreesavybes es
+left join enciklopedija.encsmw_rels2 r on es.id=r.p_id
+left join enciklopedija.encsmw_ids s on s.smw_id=r.s_id
+left join enciklopedija.encsmw_ids o on o.smw_id=r.o_id
+left join enciklopedija.encsmw_redi2 rd on rd.o_id=r.s_id;
+
+truncate ggetree.ggelist;
+insert into ggetree.ggelist
+select * from ggetree.ggelist_temp;
+
+truncate ggetree.ggeabc;
+insert into ggetree.ggeabc
+SELECT l.o_title, l.stipas, abc.abc abc, count(1) sk 
+FROM ggetree.ggelist l
+LEFT join test.abc abc on l.s_title like abc.abc2
+group by l.o_title, l.stipas, abc.abc;
+
+truncate ggetree.ggepg_temp;
+insert into ggetree.ggepg_temp
+select a.o_title, a.stipas, a.abc, a.sk, sum(case when isnull(b.sk) then 0 else b.sk end) ska,
+ sum(case when isnull(b.sk) then 0 else b.sk end) div 20 pg
+from ggetree.ggeabc a
+left join ggetree.ggeabc b on b.o_title=a.o_title and b.stipas=a.stipas and b.abc<a.abc
+group by a.o_title, a.stipas, a.abc, a.sk;
+
+truncate ggetree.ggepg;
+insert into ggetree.ggepg
+select * from ggetree.ggepg_temp;
+
+truncate ggetree.ggesk_temp;
+insert into ggetree.ggesk_temp
+select a.o_title, a.stipas, sum(a.sk) kiek, group_concat(concat(a.abc,':',a.pg) order by a.abc asc separator ',') abc 
+from ggetree.ggepg a
+group by a.o_title, a.stipas;
+
+truncate ggetree.ggesk;
+insert into ggetree.ggesk
+select * from ggetree.ggesk_temp;
+
+truncate ggetree.gge2abc;
+insert into ggetree.gge2abc
+SELECT l.o_title, l.stipas, abc1.abc, substr(concat(abc1.abc,abc2.abc3),1,2) rabc, count(1) sk
+FROM ggetree.ggeabc a 
+left join test.abc abc1 on a.abc=abc1.abc
+left join ggetree.ggelist l on l.o_title=a.o_title and l.stipas=a.stipas and l.s_title like abc1.abc2
+LEFT join test.abc abc2 on l.s_title like concat(abc1.abc,abc2.abc3)
+where a.sk>=20 
+group by l.o_title, l.stipas, abc1.abc,abc2.abc3;
+
+truncate ggetree.gge2pg;
+insert into ggetree.gge2pg
+select a.o_title, a.stipas, a.abc, a.rabc, a.sk, pg.ska + sum(case when isnull(b.sk) then 0 else b.sk end) ska,
+ (pg.ska + sum(case when isnull(b.sk) then 0 else b.sk end)) div 20 pg
+from ggetree.gge2abc a
+left join ggetree.gge2abc b on b.o_title=a.o_title and b.stipas=a.stipas and b.abc=a.abc and b.rabc<a.rabc
+left join ggetree.ggepg pg on pg.o_title=a.o_title and pg.stipas=a.stipas and pg.abc=a.abc 
+group by a.o_title, a.stipas, a.abc, a.rabc, a.sk, pg.ska;
+
+truncate ggetree.gge2sk_temp;
+insert into ggetree.gge2sk_temp
+select a.o_title, a.stipas, a.abc, sum(a.sk) kiek, group_concat(concat(a.rabc,':',a.pg) order by a.rabc asc separator ',') rabc 
+from ggetree.gge2pg a
+group by a.o_title, a.stipas, a.abc;
+
+truncate ggetree.gge2sk;
+insert into ggetree.gge2sk
+select * from ggetree.gge2sk_temp;
+
+end

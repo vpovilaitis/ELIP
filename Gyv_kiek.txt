@@ -1,0 +1,28 @@
+begin
+
+truncate test.gyvenvietes_abc;
+insert into test.gyvenvietes_abc
+SELECT replace(o.smw_title,'_',' ') o_title, abc.abc abc, count(1) sk FROM enciklopedija.encsmw_rels2 r
+left join enciklopedija.encsmw_ids s on s.smw_id=r.s_id
+left join enciklopedija.encsmw_ids p on p.smw_id=r.p_id
+left join enciklopedija.encsmw_ids o on o.smw_id=r.o_id
+LEFT join test.abc abc on s.smw_title like abc.abc2
+where p.smw_title = 'Miestas_priklauso'
+and r.p_id=1070890
+group by o.smw_title, abc.abc
+order by 1,2;
+
+truncate test.gyvenvietes_pg;
+insert into test.gyvenvietes_pg
+select a.o_title, a.abc, a.sk, sum(case when isnull(b.sk) then 0 else b.sk end) ska,
+ sum(case when isnull(b.sk) then 0 else b.sk end) div 25 pg
+from test.gyvenvietes_abc a
+left join test.gyvenvietes_abc b on b.o_title=a.o_title and b.abc<a.abc
+group by a.o_title, a.abc, a.sk;
+
+truncate taxon.ADMV_miestu_sk;
+insert into taxon.ADMV_miestu_sk
+select a.o_title _page, sum(a.sk) kiek, group_concat(concat(a.abc,':',a.pg) order by a.abc asc separator ',') abc from test.gyvenvietes_pg a
+group by a.o_title;
+
+end

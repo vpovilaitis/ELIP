@@ -1,0 +1,112 @@
+begin
+
+truncate enc_cat_page;
+insert into enc_cat_page
+select page_id, replace(page_title,'_',' ') page_title
+from enciklopedija.encpage
+where page_namespace=14;
+
+truncate enc_temp_page;
+insert into enc_temp_page
+select page_id, replace(page_title,'_',' ') page_title
+from enciklopedija.encpage
+where page_namespace=10;
+
+truncate enc_tax_page;
+insert into enc_tax_page
+select p.page_id, replace(p.page_title,'_',' ') page_title
+from enciklopedija.enctemplatelinks t
+left join enciklopedija.encpage p on (p.page_id = t.tl_from and p.page_namespace=0)
+where t.tl_namespace=10 and t.tl_title='Auto_taxobox' and p.page_id is not null;
+
+truncate enc_main_page;
+insert into enc_main_page
+select page_id, replace(page_title,'_',' ') page_title
+from enciklopedija.encpage
+where page_namespace=0;
+
+truncate enc_sritis_page;
+insert into enc_sritis_page
+select page_id, replace(page_title,'_',' ') page_title
+from enciklopedija.encpage
+where page_namespace=800;
+
+truncate enc_cat_links;
+insert into enc_cat_links
+select count(1) kiek, replace(cl_to,'_',' ') cl_to
+from enciklopedija.enccategorylinks
+group by cl_to;
+
+truncate enc_cat_links_non;
+insert into enc_cat_links_non
+select t.* from enc_cat_links t
+where not exists (select 1
+   from enc_cat_page p
+   where t.cl_to = p.page_title);
+   
+truncate enc_cat_non_use;
+insert into enc_cat_non_use
+select t.page_title from enc_cat_page t
+where not exists (select 1 from enc_cat_links l
+   where t.page_title=l.cl_to);
+   
+truncate enc_redr_main;
+insert into enc_redr_main
+select replace(p.page_title,'_',' ') pfrom, replace(r.rd_title,'_',' ') pto
+from enciklopedija.encredirect r
+left join enciklopedija.encpage p on (r.rd_from=p.page_id and p.page_namespace=0)
+where r.rd_namespace=0;
+
+truncate enc_redr_sritis;
+insert into enc_redr_sritis
+select replace(p.page_title,'_',' ') pfrom, replace(r.rd_title,'_',' ') pto
+from enciklopedija.encredirect r
+left join enciklopedija.encpage p on (r.rd_from=p.page_id and p.page_namespace=800)
+where r.rd_namespace=800;
+
+truncate test.pap_srit_aves;
+insert into test.pap_srit_aves 
+SELECT concat('Sritis:',ifnull(r.pto,p.name),'/',p.country,if(s.nr=1,'',concat('/',s.nr-1) ) ) rez, 
+  s.nr, p.name, p.speciessyn, p.country
+FROM `paplitimas` p
+left join enc_redr_main r on (p.name = r.pfrom)
+left join Skaiciai s on (((p.speciessyn div 50)+1) >= s.nr)
+WHERE p.class = 'Aves'
+and p.taxType<>'rūšis'
+and not exists (select 1 from enc_sritis_page ep
+where ep.page_title = concat(ifnull(r.pto,p.name),'/',p.country,if(s.nr=1,'',concat('/',s.nr-1) ) ) );
+
+truncate test.pap_srit_amphibia;
+insert into test.pap_srit_amphibia 
+SELECT concat('Sritis:',ifnull(r.pto,p.name),'/',p.country,if(s.nr=1,'',concat('/',s.nr-1) ) ) rez, 
+  s.nr, p.name, p.speciessyn, p.country
+FROM `paplitimas` p
+left join enc_redr_main r on (p.name = r.pfrom)
+left join Skaiciai s on (((p.speciessyn div 50)+1) >= s.nr)
+WHERE p.class = 'Amphibia'
+and p.taxType<>'rūšis'
+and not exists (select 1 from enc_sritis_page ep
+where ep.page_title = concat(ifnull(r.pto,p.name),'/',p.country,if(s.nr=1,'',concat('/',s.nr-1) ) ) );
+
+truncate test.pap_srit_lepidoptera;
+insert into test.pap_srit_lepidoptera 
+SELECT concat('Sritis:',ifnull(r.pto,p.name),'/',p.country,if(s.nr=1,'',concat('/',s.nr-1) ) ) rez, 
+  s.nr, p.name, p.speciessyn, p.country
+FROM `paplitimas` p
+left join enc_redr_main r on (p.name = r.pfrom)
+left join Skaiciai s on (((p.speciessyn div 50)+1) >= s.nr)
+WHERE p.order = 'Lepidoptera'
+and p.taxType<>'rūšis'
+and not exists (select 1 from enc_sritis_page ep
+where ep.page_title = concat(ifnull(r.pto,p.name),'/',p.country,if(s.nr=1,'',concat('/',s.nr-1) ) ) );
+
+truncate test.cat_tax;
+insert into test.cat_tax 
+SELECT concat('Kategorija:',p.page_title ) rez
+FROM `enc_tax_page` p
+WHERE not exists (select 1 from enc_cat_page ep
+   where ep.page_title = p.page_title )
+and exists (select 1 from enc_cat_links_non cln
+   where cln.cl_to = p.page_title );
+   
+end
