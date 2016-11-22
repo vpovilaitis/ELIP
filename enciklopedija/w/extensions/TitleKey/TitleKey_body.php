@@ -37,19 +37,22 @@ class TitleKey {
 	static function setBatchKeys( $titles ) {
 		$rows = array();
 		foreach( $titles as $id => $title ) {
-			$words[] = explode(" ", $title->getText());
+			$words = preg_split("/[\s,\(\)]+/", $title->getText());
 			$wcount = count($words);
 			if ($wcount > 1) {
 				$wnr = 0;
 				foreach( $words as $wid => $word ) {
 					$wnr = $wnr+1;
+					$line = '';
+					if (strlen($line . $word) > 0) {
+					    $line .=  '' . $word;
 					if ($wnr > 1) {
 						$rows[] = array(
 							'tk_page' => $id,
 							'tk_namespace' => $title->getNamespace(),
-							'tk_key' => self::normalize( $word ),
+							'tk_key' => self::normalize( $line ),
 						);
-					}
+					}}
 				}
 			}
 			$rows[] = array(

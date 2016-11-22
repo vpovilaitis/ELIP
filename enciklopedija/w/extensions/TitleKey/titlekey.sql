@@ -9,7 +9,7 @@ CREATE TABLE /*$wgDBprefix*/titlekey (
   -- With namespace prefix, case-folded, in space form.
   tk_key varchar(255) binary NOT NULL,
   
-  PRIMARY KEY tk_page (tk_page, tk_key),
+  PRIMARY KEY tk_page (tk_page),
   INDEX name_key (tk_namespace, tk_key)
 
 ) /*$wgDBTableOptions*/;
