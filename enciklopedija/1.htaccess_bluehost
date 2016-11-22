@@ -1,0 +1,10 @@
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^enciklopedija\.litua\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.enciklopedija\.litua\.com$
+RewriteRule ^/?$ "http\:\/\/enciklopedija\.litua\.com\/wiki\/Pagrindinis_puslapis" [R=301,L]
+
+# Use PHP5 Single php.ini as default
+AddHandler application/x-httpd-php5s .php
+RewriteRule ^/?wiki(/.*)?$ /w/index.php [PT,L,QSA]
+RewriteRule ^/*$ /w/index.php [L,QSA]
