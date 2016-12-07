@@ -1,0 +1,198 @@
+﻿local HtmlBuilder = require('Module:HtmlBuilder')
+
+local zod = {}
+local frame
+local conf
+local pgname
+local zodyn = {
+        [1] = 'lkz',
+        ['lkz'] = { tmpl = 'LKŽ', tbl = 'zod_lkz', titl = 'Lietuvių kalbos žodynas', link = 'Sritis:Lietuvių kalbos žodynas', po=50  },
+        [2] = 'tzz',
+        ['tzz'] = { tmpl = 'TŽŽ', tbl = 'zod_tzz', titl = 'Tarptautinių žodžių žodynas', link = 'Sritis:Tarptautinių žodžių žodynas', po=50 },
+        [3] = 'leb',
+        ['leb'] = { tmpl = 'LEB', tbl = 'zod_leb', titl = 'Lietuvių enciklopedija', link = 'Sritis:Lietuvių enciklopedija', po=50 },
+        [4] = 'vle',
+        ['vle'] = { tmpl = 'VLE', tbl = 'zod_vle', titl = 'Visuotinė lietuvių enciklopedija', link = 'Sritis:Visuotinė lietuvių enciklopedija', po=50 },
+        [5] = 'ekz',
+        ['ekz'] = { tmpl = 'EKŽ', tbl = 'zod_ekz', titl = 'Enciklopedinis kompiuterijos žodynas', link = 'Sritis:Enciklopedinis kompiuterijos žodynas', po=50 }
+    }
+    
+zod.istmpl = function( tmpl, pgname )
+    local rpage, err = mw.title.new(pgname)
+    local pagename = pgname
+    local rtxt = ''
+    local ret = false
+    if tmpl == nil or tmpl == '' then return false end
+    if rpage and rpage.id ~= 0 then
+        rtxt = rpage:getContent() or ""
+        if rpage.isRedirect then
+            local redirect = mw.ustring.match( rtxt, "^#[Rr][Ee][Dd][Ii][Rr][Ee][Cc][Tt]%s*%[%[(.-)%]%]" )
+ 
+            if not redirect then
+                redirect = mw.ustring.match( rtxt, "^#[Pp][Ee][Rr][Aa][Dd][Rr][Ee][Ss][Aa][Vv][Ii][Mm][Aa][Ss]%s*%[%[(.-)%]%]" )
+            end
+            if redirect then
+                pagename = redirect
+                local page, err = mw.title.new(pagename)
+                if page and page.id ~= 0 then
+                    rtxt = page:getContent() or ""
+                end
+            end
+        end
+    end
+ 
+    if rtxt ~= '' then
+        ret = mw.ustring.match( rtxt, "%{%{%s*"..tmpl.."%s*[%|%}]" )
+        if ret == nil then
+            ret = false
+        else
+            ret = true
+        end
+    end
+ 
+    return ret
+end
+
+function zod._zod(args)
+    frame = mw.getCurrentFrame()
+    local pgname = mw.title.getCurrentTitle().text
+    local zodynas = args.zodynas
+    if zodynas == nil or zodynas == '' then 
+        zodynas = conf.zodynas
+        if zodynas == nil or zodynas == '' then
+            return ''
+        end
+    end
+    if args.zodis ~= nil and args.zodis ~= '' then
+        pgname = args.zodis
+    end
+    if zodynas == 'test' then
+        return mw.title.getCurrentTitle().text
+    elseif zodynas == 'all' then
+        local res = HtmlBuilder.create()
+        for i, v in ipairs(zodyn) do
+            -- res
+            --     .wikitext(i)
+            --     .newline()
+            res.node(zod._zod{ zodynas = v, zodis = pgname, showpg = args.showpg })
+        end
+        if args.deb and args.deb == 'taip' then
+            local rest = HtmlBuilder.create('table')
+            rest
+                .node(res)
+                .done()
+            return tostring(rest)
+        else
+            return tostring(res)
+        end
+    end
+    if zodyn[ zodynas ] == nil then return '' end
+    local myzod = zodyn[ zodynas ]
+    local istmpl = zod.istmpl(myzod.tmpl, pgname)
+    if not istmpl then return '' end
+    pgname = mw.text.listToText(mw.text.split( pgname, "'" ), "''", "''")
+    local pries = frame:preprocess("{{#get_db_data:db=taxon|from="..myzod.tbl.."|where=zod<'" .. pgname ..
+            "'|limit=1|order by=zod DESC|data=rz=zod}}{{#for_external_table:{{{rz}}}}}{{#clear_external_data:}}")
+    local priesnd
+    if pries == nil then 
+        priesnd = HtmlBuilder.create('')
+    else
+        priesnd = HtmlBuilder.create('div')
+        priesnd
+            .css('float', 'left')
+            .wikitext('[[vaizdas:U+2190.svg|25px|link=')
+            .wikitext(pries)
+            .wikitext('|<--]]')
+            .done()
+    end
+        
+    local po = frame:preprocess("{{#get_db_data:db=taxon|from="..myzod.tbl.."|where=zod>'" .. pgname ..
+            "'|limit=1|order by=zod|data=rz=zod}}{{#for_external_table:{{{rz}}}}}{{#clear_external_data:}}")
+    local pond
+    if po == nil then 
+        pond = HtmlBuilder.create('')
+    else
+        pond = HtmlBuilder.create('div')
+        pond
+            .css('float', 'right')
+            .wikitext('[[Vaizdas:U+2192.svg|25px|link=')
+            .wikitext(po)
+            .wikitext('|-->]]')
+            .done()
+    end
+    
+    local nrget = frame:preprocess("{{#get_db_data:db=taxon|from="..myzod.tbl.."|where=zod<='" .. pgname ..
+            "'|limit=1|order by=zod|data=nr=count(1)}}{{#for_external_table:{{{nr}}}}}{{#clear_external_data:}}")
+    if nrget == nil or nrget == '' then
+        nrget = '0'
+    end
+    local nr, mod = math.modf( tonumber(nrget) / myzod.po )
+    local nrnd = HtmlBuilder.create()
+    if (nr ~= 0) and (args.showpg == 'taip') then
+        nrnd
+            .wikitext('(')
+            .wikitext(nr)
+            .wikitext('&nbsp;puslapis)')
+            .wikitext('&nbsp;&nbsp;')
+    end
+            
+    local res = HtmlBuilder.create()
+    res
+        --.tag('th')
+        .newline()
+        .wikitext('|-')
+        .newline()
+        .wikitext('! align="center" colspan="2" |')
+        .newline()
+            --.attr('align', 'center')
+            --.attr('colspan', '2')
+            .node(priesnd)
+            .wikitext('&nbsp;&nbsp;[[')
+            .wikitext(myzod.link)
+            .wikitext('|')
+            .wikitext(myzod.titl)
+            .wikitext(']]&nbsp;&nbsp;')
+            .node(nrnd)
+            .node(pond)
+            .newline()
+        .wikitext('|-')
+        .newline()
+            -- .done()
+        -- .done()
+    
+    if args.deb and args.deb == 'taip' then
+        local rest = HtmlBuilder.create()
+        rest
+        .newline()
+        .wikitext('{|')
+        .newline()
+            .node(res)
+        .wikitext('|}')
+        .newline()
+            --.done()
+        return tostring(rest)
+    else
+        return tostring(res)
+    end
+end
+
+function zod.zod(frame)
+    -- ParserFunctions considers the empty string to be false, so to preserve the previous 
+    -- behavior of {{navbox}}, change any empty arguments to nil, so Lua will consider
+    -- them false too.
+    local args = {}
+    conf = frame.args
+    local parent_args = frame:getParent().args;
+ 
+    for k, v in pairs(parent_args) do
+        if v ~= '' then
+            args[k] = v
+        end
+    end
+    if args.zodis == nil then
+        args.zodis = mw.title.getCurrentTitle().text
+    end
+    return zod._zod(args)
+end
+ 
+return zod
