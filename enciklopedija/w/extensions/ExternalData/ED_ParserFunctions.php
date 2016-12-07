@@ -162,6 +162,8 @@ class EDParserFunctions {
 			}
 		} else if ( $format == 'json' ) {
 		    $mappings = '';
+		} else if ( $format == 'json text' ) {
+		    $mappings = '';
 		} else {
 			return;
 		}

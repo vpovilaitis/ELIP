@@ -264,11 +264,11 @@ function sin._esin(args)
                 local mlas = parms['Priklauso'] or ''
                 local mlasla = parms['Lotyniškai'] or ''
                 if args['Lotyniškai'] ~= mlasla or mla ~= mlas then
-                    root.wikitext( frame:callParserFunction{ name = '#formlink', 
+                    root.wikitext( frame:callParserFunction{ name = '#formlink:form=Sinonimas', 
                                 args = formargs } )
                 end
             else
-                root.wikitext( frame:callParserFunction{ name = '#formlink', 
+                root.wikitext( frame:callParserFunction{ name = '#formlink:form=Sinonimas', 
                                 args = formargs } )
                 -- root.wikitext( Cite._isn ( frame, {}, { 'Negalimas puslapio vardas', nil } ) )
                 -- root.newline()
@@ -600,7 +600,7 @@ function sin._ssin(args)
     
     if gbifid ~= '' then 
         local singbifj = frame:preprocess("{{#get_web_data:url=http://api.gbif.org/v1/species/"..gbifid..
-            "/synonyms?limit=300|format=json}}") or '{}'
+            "/synonyms?limit=300|format=json text}}") or '{}'
         if singbifj ~= nil then
             singbifm = json.decode(singbifj)
             table.sort(singbifm.results, _compCanonicalName)
@@ -620,11 +620,11 @@ function sin._ssin(args)
     -- if eolid == '' then
     --     local ladburl = mw.text.listToText(mw.text.split( ladb, " " ), "+", "+")
     --     local pheolidj = frame:preprocess("{{#get_web_data:url=http://eol.org/api/search/1.0.json?q=" ..
-    --         ladburl .. "&page=1&exact=true&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json}}") or '{}'
+    --         ladburl .. "&page=1&exact=true&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json text}}") or '{}'
     --     local pheolid = json.decode(pheolidj)
     --     if pheolid == nil or pheolid.totalResults == 0 then
     --         pheolidj = frame:preprocess("{{#get_web_data:url=http://eol.org/api/search/1.0.json?q=" ..
-    --             ladburl .. "&page=1&exact=false&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json}}") or '{}'
+    --             ladburl .. "&page=1&exact=false&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json text}}") or '{}'
     --         pheolid = json.decode(pheolidj)
     --     end
     --     if pheolid ~= nil and pheolid.results ~= nil then
@@ -637,7 +637,7 @@ function sin._ssin(args)
     
     if eolid ~= '' then 
         local sineolj = frame:preprocess("{{#get_web_data:url=http://eol.org/api/pages/1.0/"..eolid..
-            ".json?images=0&videos=0&sounds=0&maps=0&text=0&iucn=false&subjects=overview&licenses=all&details=false&common_names=false&synonyms=true&references=false&vetted=0&cache_ttl=|format=json}}") or '{}'
+            ".json?images=0&videos=0&sounds=0&maps=0&text=0&iucn=false&subjects=overview&licenses=all&details=false&common_names=false&synonyms=true&references=false&vetted=0&cache_ttl=|format=json text}}") or '{}'
         if sineolj ~= nil then
             sineolm = json.decode(sineolj)
             -- table.sort(sineolm.synonyms, _compEolCanonicalName)

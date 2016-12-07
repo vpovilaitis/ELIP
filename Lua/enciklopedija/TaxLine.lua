@@ -798,7 +798,7 @@ taxline.refcol2013 = function( frame )
     local infeol = ''
     if eolid ~= '' and eolidsk == 1 then 
         local refeolj = frame:preprocess("{{#get_web_data:url=http://eol.org/api/pages/1.0/"..eolid..
-            ".json?images=0&videos=0&sounds=0&maps=0&text=0&iucn=false&subjects=overview&licenses=all&details=false&common_names=false&synonyms=false&references=true&vetted=0&cache_ttl=|format=json}}") or '{}'
+            ".json?images=0&videos=0&sounds=0&maps=0&text=0&iucn=false&subjects=overview&licenses=all&details=false&common_names=false&synonyms=false&references=true&vetted=0&cache_ttl=|format=json text}}") or '{}'
         local refeolm = json.decode(refeolj or '')
         if refeolm ~= nil then
         for i, eref in ipairs( refeolm.references ) do
@@ -819,7 +819,7 @@ taxline.refcol2013 = function( frame )
     local infgbif = ''
     if gbifid ~= '' and gbifidsk == 1 then 
         local refgbifj = frame:preprocess("{{#get_web_data:url=http://api.gbif.org/v1/species/"..gbifid..
-            "/references?limit=100|format=json}}") or '{}'
+            "/references?limit=100|format=json text}}") or '{}'
         local refgbifm = json.decode(refgbifj)
         if refgbifm ~= nil and refgbifm.results ~= nil then
             for i, eref in ipairs( refgbifm.results ) do

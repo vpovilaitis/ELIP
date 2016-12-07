@@ -1,0 +1,283 @@
+﻿{| cellpadding="2" width="{{{lentplotis|350}}}px" style="margin-bottom: 0.5em; margin-left: 1em; background: #f9f9f9; float: right; border: 1px #e0efef solid;"
+|- 
+! align="center" colspan="2" style="background:#e0efef;" | <big>[[Pavadinimas::{{#explode:{{{pavadinimas<includeonly>|{{PAGENAME}}</includeonly><noinclude>|Miestas (Lietuvoje)</noinclude>}}}| (|0}}]]{{#set:Vardininkas={{#explode:{{{pavadinimas<includeonly>|{{PAGENAME}}</includeonly><noinclude>|Miestas (Lietuvoje)</noinclude>}}}| (|0}}}}</big>{{#ifeq:{{{kirč<includeonly>|</includeonly>}}}|||<br/>(kirč. {{{kirč}}})}} {{#ifeq:{{{origpavadin-1|}}}|||<br/>{{ {{{origpavadin-kk1}}}|{{{origpavadin-1}}}}} }}{{#ifeq:{{{origpavadin-2|}}}|||<br/>{{ {{{origpavadin-kk2}}}|{{{origpavadin-2}}}}} }}{{#ifeq:{{{origpavadin-3|}}}|||<br/>{{ {{{origpavadin-kk3}}}|{{{origpavadin-3}}}}} }}{{#ifeq:{{{kilm|{{#explode:{{{pavadinimas<includeonly>|{{PAGENAME}}</includeonly><noinclude>|Miestas (Lietuvoje)</noinclude>}}}| (|0}}}}}|||{{#set:Kilmininkas={{{kilm|{{#explode:{{{pavadinimas<includeonly>|{{PAGENAME}}</includeonly><noinclude>|Miestas (Lietuvoje)</noinclude>}}}| (|0}}}}}}}}}
+|-
+|
+{{#invoke:Žodynas | zod |zodynas=all}}
+|-
+{{#if:{{{herbas|}}}{{{vėliava|}}}|
+{{!}} align="center" colspan="2" nowrap style="line-height:14px;"{{!}} {{#if:{{{herbas|}}}|<span slyle="display: inline;" title="Herbas">&nbsp;&nbsp;&nbsp;[[Miestas turi herbą::Vaizdas:{{{herbas}}}|80px]]&nbsp;&nbsp;&nbsp;</span>}}{{#if:{{{vėliava|}}}|<span slyle="display: inline;" title="Vėliava">&nbsp;&nbsp;&nbsp;[[Miestas turi vėliavą::Vaizdas:{{{vėliava}}}|80px|border]]&nbsp;&nbsp;&nbsp;</span>}}
+{{!}}-
+}}
+{{#ifeq:{{{galerija|}}}|||
+{{!}} align="center" colspan="2" {{!}}
+{{#sgallery:
+|width=300
+|height=220
+|imagelist={{{galerija|}}}
+}}
+{{!}}-
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+}}
+{{#ifeq:{{{paveikslėlis-1|}}}|||{{#ifeq:{{{galerija|}}}||
+{{!}} align="center" colspan="2" {{!}} [[Vaizdas::Vaizdas:{{{paveikslėlis-1}}}|{{{plotis|350}}}px|]]{{#ifeq:{{{paveikslėlio tekstas-1|}}}|||<br /><small>''{{{paveikslėlio tekstas-1}}}''{{#set:Vaizdo tekstas={{{paveikslėlio tekstas-1}}}}}</small>}}
+{{!}}-
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+|{{#set:Vaizdas=Vaizdas:{{{paveikslėlis-1}}}}}{{#ifeq:{{{paveikslėlio tekstas-1|}}}|||{{#set:Vaizdo tekstas={{{paveikslėlio tekstas-1}}}}}}}}}
+}}
+{{#if:{{{locmap|{{{valstybė|}}}}}}{{{long|}}}{{{PL|}}}|
+{{!}} align="center" colspan="2" nowrap {{!}} 
+{{#tag:tabber|
+Vieta={{#ifeq:{{{long|}}}{{{PL|}}}|||{{#if:{{{locmap|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}}|<span slyle="display: inline;" title="Žemėlapis">{{Location map|{{{locmap|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}}|float=center|width={{{mapplotis|450}}}|label={{{pavadinimas|{{PAGENAME}}}}}|position={{#ifeq:{{{long|}}}||{{#ifeq:{{{IL|<noinclude>25</noinclude>}}}|||{{#ifeq:{{#expr:{{Coord/dms2dec|{{{EW|E}}}|{{{IL|<noinclude>25</noinclude>}}}|{{{IM|0}}}|{{{IS|0}}}}}>{{Location map/center|{{{locmap|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}}}}}}|1|left|right}}}}|{{#ifeq:{{#expr:{{{long|}}}>{{Location map/center|{{{locmap|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}}}}}}|1|left|right}}}}|lat={{#if:{{{lat|}}}|{{{lat}}}|{{Coord/dms2dec|{{{NS|N}}}|{{{PL|<noinclude>54</noinclude>}}}|{{{PM|<includeonly>0</includeonly><noinclude>40</noinclude>}}}|{{{PS|<includeonly>0</includeonly><noinclude>40</noinclude>}}}}}}}|long={{#if:{{{long|}}}|{{{long}}}|{{Coord/dms2dec|{{{EW|E}}}|{{{IL|<noinclude>25</noinclude>}}}|{{{IM|<includeonly>0</includeonly><noinclude>17</noinclude>}}}|{{{IS|<includeonly>0</includeonly><noinclude>30</noinclude>}}}}}}}|caption=}}</span>}}}}{{#if:{{{long|}}}|{{coord|{{{lat|}}}|{{{long|}}}|display=inline|{{#if:{{{valstybė|<noinclude>Lietuva</noinclude>}}}|{{#if:{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}|region:{{#if:{{{AdmVienetas|<noinclude>Vilniaus miestas</noinclude>}}}|{{#if:{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}|{{{AdmVienetas<noinclude>|Vilniaus miestas</noinclude>}}}}}|{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}|{{{AdmVienetas<noinclude>|Vilniaus miestas</noinclude>}}}}}|{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}}}|{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}}}_}}}}type:{{#if:{{{gyventoju|}}}|city({{{gyventoju}}})|city}}_scale:{{#if:{{{gyventoju|}}}|{{#ifeq:{{{gyventoju|}}}|0|250000|{{#switch:{{#expr:(ln({{{gyventoju}}}/15625)/ln(2)) round 0}}|0=250000|1=500000|2=1000000|3=2000000|4=4000000|5=8000000|#default={{#ifexpr:{{#expr:(ln({{{gyventoju}}}/15625)/ln(2)) round 0}} > 0|8000000|250000}}}}}}|250000}}|name={{PAGENAME}}|format=dms}}|{{#if:{{{IL|<noinclude>25</noinclude>}}}|{{coord|{{{PL|<includeonly>0</includeonly><noinclude>54</noinclude>}}}|{{{PM|<includeonly>0</includeonly><noinclude>40</noinclude>}}}|{{{PS|<includeonly>0</includeonly><noinclude>40</noinclude>}}}|{{{NS|N}}}|{{{IL|<includeonly>0</includeonly><noinclude>25</noinclude>}}}|{{{IM|<includeonly>0</includeonly><noinclude>17</noinclude>}}}|{{{IS|<includeonly>0</includeonly><noinclude>30</noinclude>}}}|{{{EW|E}}}|display=inline|{{#if:{{{valstybė|<noinclude>Lietuva</noinclude>}}}|{{#if:{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}|region:{{#if:{{{AdmVienetas|<noinclude>Vilniaus miestas</noinclude>}}}|{{#if:{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}|{{{AdmVienetas<noinclude>|Vilniaus miestas</noinclude>}}}}}|{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}|{{{AdmVienetas<noinclude>|Vilniaus miestas</noinclude>}}}}}|{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}}}|{{ISOKodas|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}}}_}}}}type:{{#if:{{{gyventoju|<noinclude>20000</noinclude>}}}|city({{{gyventoju<noinclude>|20000</noinclude>}}})|city}}_scale:{{#if:{{{gyventoju|}}}|{{#ifeq:{{{gyventoju|}}}|0|250000|{{#switch:{{#expr:(ln({{{gyventoju}}}/15625)/ln(2)) round 0}}|0=250000|1=500000|2=1000000|3=2000000|4=4000000|5=8000000|#default={{#ifexpr:{{#expr:(ln({{{gyventoju}}}/15625)/ln(2)) round 0}} > 0|8000000|250000}}}}}}|250000}}|name={{PAGENAME}}}}}}}}{{#if:{{{lat|}}}{{{long|}}}{{{PL|}}}{{{IL|}}}|{{#set:Koordinatės={{#if:{{{lat|}}}|{{{lat|}}}|{{#if:{{{PL|}}}|{{Coord/dms2dec|{{{NS|N}}}|{{{PL|<noinclude>54</noinclude>}}}|{{{PM|<includeonly>0</includeonly><noinclude>40</noinclude>}}}|{{{PS|<includeonly>0</includeonly><noinclude>40</noinclude>}}}}}}}}}°, {{#if:{{{long|}}}|{{{long|}}}|{{#if:{{{IL|}}}|{{Coord/dms2dec|{{{EW|E}}}|{{{IL|<noinclude>25</noinclude>}}}|{{{IM|<includeonly>0</includeonly><noinclude>17</noinclude>}}}|{{{IS|<includeonly>0</includeonly><noinclude>30</noinclude>}}}}}}}}}°}}}}
+{{!}}-{{!}}
+GoogleMap={{#display_map:{{#if:{{{lat|}}}|{{{lat|}}}|{{#if:{{{PL|}}}|{{Coord/dms2dec|{{{NS|N}}}|{{{PL|<noinclude>54</noinclude>}}}|{{{PM|<includeonly>0</includeonly><noinclude>40</noinclude>}}}|{{{PS|<includeonly>0</includeonly><noinclude>40</noinclude>}}}}}}}}}°, {{#if:{{{long|}}}|{{{long|}}}|{{#if:{{{IL|}}}|{{Coord/dms2dec|{{{EW|E}}}|{{{IL|<noinclude>25</noinclude>}}}|{{{IM|<includeonly>0</includeonly><noinclude>17</noinclude>}}}|{{{IS|<includeonly>0</includeonly><noinclude>30</noinclude>}}}}}}}}}°
+|height=450px
+|width=450px
+|service=googlemaps
+|enablefullscreen = yes
+|controls=pan,zoom,type,scale,streetview
+|types=roadmap,satellite,hybrid,terrain,physical,earth
+}}
+{{!}}-{{!}}
+OpenLayers={{#display_map:{{#if:{{{lat|}}}|{{{lat|}}}|{{#if:{{{PL|}}}|{{Coord/dms2dec|{{{NS|N}}}|{{{PL|<noinclude>54</noinclude>}}}|{{{PM|<includeonly>0</includeonly><noinclude>40</noinclude>}}}|{{{PS|<includeonly>0</includeonly><noinclude>40</noinclude>}}}}}}}}}°, {{#if:{{{long|}}}|{{{long|}}}|{{#if:{{{IL|}}}|{{Coord/dms2dec|{{{EW|E}}}|{{{IL|<noinclude>25</noinclude>}}}|{{{IM|<includeonly>0</includeonly><noinclude>17</noinclude>}}}|{{{IS|<includeonly>0</includeonly><noinclude>30</noinclude>}}}}}}}}}°
+|height=450px
+|width=450px
+|service=openlayers
+|enablefullscreen = yes
+|controls=pan,zoom,type,scale,streetview
+|types=roadmap,satellite,hybrid,terrain,physical,earth
+}}
+{{!}}-{{!}}
+LeafLet={{#display_map:{{#if:{{{lat|}}}|{{{lat|}}}|{{#if:{{{PL|}}}|{{Coord/dms2dec|{{{NS|N}}}|{{{PL|<noinclude>54</noinclude>}}}|{{{PM|<includeonly>0</includeonly><noinclude>40</noinclude>}}}|{{{PS|<includeonly>0</includeonly><noinclude>40</noinclude>}}}}}}}}}°, {{#if:{{{long|}}}|{{{long|}}}|{{#if:{{{IL|}}}|{{Coord/dms2dec|{{{EW|E}}}|{{{IL|<noinclude>25</noinclude>}}}|{{{IM|<includeonly>0</includeonly><noinclude>17</noinclude>}}}|{{{IS|<includeonly>0</includeonly><noinclude>30</noinclude>}}}}}}}}}°
+|height=450px
+|width=450px
+|service=leaflet
+|enablefullscreen = yes
+|controls=pan,zoom,type,scale,streetview
+|types=roadmap,satellite,hybrid,terrain,physical,earth
+}}
+{{!}}-{{!}}
+WikiMapia={{#widget:WikiMapia|lat={{{lat|{{#explode:{{#geocode:{{{2|55° 12' 50" Š, 24° 59' 31" R}}}|yahoo|format=float|directional=no}}|,|0}}}}}|long={{{long|{{#explode:{{#geocode:{{{2|55° 12' 50" Š, 24° 59' 31" R}}}|yahoo|format=float|directional=no}}|,|1}}}}}|zoom=14|height={{{height|450}}}|width={{{width|450}}}}}
+{{!}}-{{!}}
+Vlasenko={{#widget:Vlasenko|long={{{long|{{#explode:{{#geocode:{{{2|55° 12' 50" Š, 24° 59' 31" R}}}|yahoo|format=float|directional=no}}|,|1}}}}}|lat={{{lat|{{#explode:{{#geocode:{{{2|55° 12' 50" Š, 24° 59' 31" R}}}|yahoo|format=float|directional=no}}|,|0}}}}}|width={{{width|450}}}|height={{{height|450}}}|zoom={{{zoom|100}}}}}<br />
+{{#ifeq:{{{title|}}}||{{{1|[[Liaušiai]]}}} topografiniame žemėlapyje{{#tag:ref|[http://maps.vlasenko.net/?lon={{{long|{{urlencode:{{#explode:{{#geocode:{{{2|<noinclude>55° 12' 50" Š, 24° 59' 31" R</noinclude>}}}|yahoo|format=float|directional=no}}|,|1}}}}}}}&lat={{{lat|{{urlencode:{{#explode:{{#geocode:{{{2|<noinclude>55° 12' 50" Š, 24° 59' 31" R</noinclude>}}}|yahoo|format=float|directional=no}}|,|0}}}}}}} maps.vlasenko.net] {{{1|[[Liaušiai]]}}}}}|{{{title|}}}}}
+{{!}}-{{!}}
+LoadMaps={{#widget:LoadMaps|long={{{long|{{#explode:{{#geocode:{{{2|55° 12' 50" Š, 24° 59' 31" R}}}|yahoo|format=float|directional=no}}|,|1}}}}}|lat={{{lat|{{#explode:{{#geocode:{{{2|55° 12' 50" Š, 24° 59' 31" R}}}|yahoo|format=float|directional=no}}|,|0}}}}}|width={{{width2|850}}}|height={{{height2|450}}}|zoom={{{zoom2|13}}}}}
+}}
+{{!}}-
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+}}
+<!-- {{Location map/object2|lat={{{lat|<noinclude>54.677778</noinclude>}}}|long={{{long|<noinclude>25.291667</noinclude>}}}|mapplotis=350|gyv={{{gyv|<noinclude>{{PAGENAME}}</noinclude>}}}|sen={{{admVienetas|<noinclude>Papilės seniūnija</noinclude>}}}|pav={{{pav<includeonly>|{{PAGENAME}}</includeonly>}}}|locmap={{{locmap|}}}|valst={{{valstybė<noinclude>|Lietuva</noinclude>}}}}}
+{{!}}- -->
+<!-- | align="center" colspan="2" style="line-height:14px;" | <small>{{UTC-s|{{{UTC|}}}|{{{valstybė|<noinclude>Lietuva</noinclude>}}}|{{{admVienetas|}}}|{{{admVienetas2|}}}|{{{admVienetas3|}}}|{{{admVienetas4|}}}|{{{admVienetas5|}}}|{{{admVienetas6|}}}}}{{UTCv-s|{{{UTCv|}}}|{{{valstybė|<noinclude>Lietuva</noinclude>}}}|{{{admVienetas|}}}|{{{admVienetas2|}}}|{{{admVienetas3|}}}|{{{admVienetas4|}}}|{{{admVienetas5|}}}|{{{admVienetas6|}}}}}</small>
+|-
+{{#if:{{{valstybė|}}}|
+{{!}} '''[[ADMV0 miestų sritis::Sritis:{{{valstybė<noinclude>|Lietuva</noinclude>}}}/Gyvenvietės|Valstybė]]:''' {{!}}{{!}} {{Vėliava|{{{valstybė<noinclude>|Lietuva</noinclude>}}}|-}} [[Miestas priklauso::Miestas priklauso valstybei::{{Šalis|{{{valstybė<noinclude>|Lietuva</noinclude>}}}}}]]{{#set:Yra={{#invoke:Parm |getr|page={{{valstybė<noinclude>|Lietuva</noinclude>}}}|parm=kilm}} miestas|Yra=Miestas|ADMV tipas=Miestas}}
+{{!}}-
+}} -->
+{{#invoke:Admv |admv|admv={{{admVienetas<includeonly>|</includeonly>}}}|sritis=Gyvenvietės|otipas=Gyvenvietė|valstybė={{{valstybė<noinclude>|Lietuva</noinclude>}}}|UTC={{{UTC|}}}|UTCv={{{UTCv|}}}|background=#e0efef}}<!-- {{#ifeq:{{{valstybė|}}}|||[[Kategorija:{{{valstybė|}}}/Gyvenvietės]]}} -->{{#ifeq:{{{admVienetas|}}}|||[[Kategorija:{{{admVienetas|}}}/Gyvenvietės]]}}
+<!-- {{#if:{{{admVienetas<includeonly>|</includeonly>}}}|
+{{!}} '''[[Sritis:{{{admVienetas<includeonly>|</includeonly>}}}/Gyvenvietės|{{#invoke:Parm |get|page={{{admVienetas<includeonly>|</includeonly>}}}|parm=tipas}}]]:''' {{!}}{{!}} {{#invoke:Admv |icon|page={{{admVienetas<includeonly>|</includeonly>}}}|text=-}} [[{{{admVienetas<includeonly>|</includeonly>}}}]]
+{{!}}-
+}} -->
+<!-- {{Miestas/ADMV-get|{{{admVienetas|}}}|ADMV1|}}
+{{Miestas/ADMV-get|{{{admVienetas|}}}|ADMV2|}}
+{{Miestas/ADMV-get|{{{admVienetas|}}}|ADMV3|}}
+{{Miestas/ADMV-get|{{{admVienetas|}}}|ADMV4|}}
+{{Miestas/ADMV-get|{{{admVienetas|}}}|ADMV5|}}
+{{Miestas/ADMV-get|{{{admVienetas|}}}|ADMV6|}}
+{{#ifeq:{{{admVienetas|}}}||{{#ifeq:{{{valstybė|}}}|||{{#set:Miestas tiesiogiai priklauso={{{valstybė|}}}}}[[Kategorija:{{{valstybė|}}}/Gyvenvietės]]}}|
+{{#ask:[[{{{admVienetas|}}}]]
+|?ADMV1#-
+|?ADMV2#-
+|?ADMV3#-
+|?ADMV4#-
+|?ADMV5#-
+|?ADMV6#-
+|format=template
+|headers=hide
+|mainlabel=-
+|link=none
+|template=Miestas/ADMV-get-show2
+|userparam={{!}}adm={{{admVienetas|}}}{{!}}link=
+|offset=
+|limit=
+}}{{#set:Miestas tiesiogiai priklauso={{{admVienetas|}}}}}[[Kategorija:{{{admVienetas|}}}/Gyvenvietės]]
+}} -->
+{{#if:{{{admVienetas-p|}}}|
+{{Miestas/ADMV|{{{admVienetas-p|}}}|{{ADMV tipas|{{{admVienetas-p|}}}}}|{{{valstVienetoLink-p|<noinclude>-</noinclude>}}}|ADMVp}}
+{{!}}-
+}}
+{{#if:{{{įkurtas|}}}{{{Magdeburgo teisė nuo|}}}{{{vadovas|}}}|
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+}}
+{{#if:{{{įkurtas|}}}|
+{{!}} '''Įkūrimo data:''' {{!}}{{!}} {{{įkurtas}}}
+{{!}}-
+}}
+{{#if:{{{Magdeburgo teisė nuo|}}}|
+{{!}} '''[[Magdeburgo teisė]] nuo:''' {{!}}{{!}} {{{Magdeburgo teisė nuo}}}
+{{!}}-
+}}
+{{#if:{{{vadovas|}}}|
+{{!}} '''{{{vadovotitulas}}}:''' {{!}}{{!}} {{{vadovas}}}
+{{!}}-
+}}
+{{#if:{{{gyventoju|}}}{{{plotas|}}}{{{altitudė|}}}|
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+}}
+{{#if:{{{gyventoju|}}}|
+{{!}} '''Gyventojų''': {{!}}{{!}} {{#set:Gyventojų skaičius={{#ifeq:{{{gyventojumetai|}}}||?|{{{gyventojumetai|}}} m.}}; {{{gyventoju|?}}}}}{{#set:Paskutinis gyventojų skaičius={{{gyventoju|0}}}}}{{#ifeq:{{{gyventoju|?}}}|?|?|{{formatnum:{{{gyventoju|?}}}}}}} {{#switch:{{{gyventojumetai|}}}||?=(?)|#default=([[{{{gyventojumetai|}}} m.]])}}
+{{!}}-
+}}
+{{#if:{{{plotas|}}}|
+{{!}} '''Plotas:''' {{!}}{{!}} {{formatnum:{{{plotas<noinclude>|20</noinclude>}}}}} km&sup2;
+{{!}}-
+}}
+{{#if:{{{gyventoju|}}}|{{#if:{{{plotas|}}}|{{#ifeq:{{#expr:({{{gyventoju<noinclude>|20000</noinclude>}}}/{{{plotas<noinclude>|20</noinclude>}}}) round 0}}|0||
+{{!}} <span style="white-space: nowrap;">'''Tankumas'''<span style="display:none{{{gyventojumetai|}}}"> <small>({{{gyventojumetai<noinclude>|2000</noinclude>}}})</small></span>:</span> {{!}}{{!}} {{formatnum:{{#expr:({{{gyventoju<noinclude>|20000</noinclude>}}}/{{{plotas<noinclude>|20</noinclude>}}}) round 0}}}} žm./km&sup2;
+{{!}}-
+}}}}}}
+{{#if:{{{altitudė|}}}|
+{{!}} '''Altitudė:''' {{!}}{{!}} {{formatnum:{{{altitudė<noinclude>|20</noinclude>}}}}} m
+{{!}}-
+}}
+{{#if:{{{pastokodas|}}}{{{telkodas|}}}{{{tinklalapis|}}}{{{globejas|}}}|
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+}}
+{{#if:{{{kirč|}}}{{{kirč-l|}}}{{{kirčl|}}}|
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+}}
+{{#if:{{{kirč|}}}|
+{{!}} '''Kirčiavimas:''' {{!}}{{!}} {{{kirč}}}
+{{!}}-
+}}
+{{#if:{{{kirč-l|}}}|
+{{!}} colspan=3 {{!}}
+{{{kirč-l}}}
+{{!}}-
+}}
+{{#if:{{{kirčl|}}}|
+{{!}} colspan=3 {{!}}
+{{{kirčl}}}
+{{!}}-
+}}
+{{#if:{{{istpav|}}}|
+! align="center" colspan="2" style="background:#e0efef;" {{!}} Istoriniai pavadinimai
+{{!}}-
+}}
+{{#if:{{{istpav|}}}|
+{{!}} colspan=3 {{!}}
+{{{istpav}}}
+{{!}}-
+}}
+{{#if:{{{pastokodas|}}}|
+{{!}} '''Pašto kodas:''' {{!}}{{!}} {{{pastokodas}}}
+{{!}}-
+}}
+{{#if:{{{telkodas|}}}|
+{{!}} '''Tel. kodas:''' {{!}}{{!}} {{{telkodas}}}
+{{!}}-
+}}
+{{#if:{{{tinklalapis|}}}|
+{{!}} '''Tinklalapis:''' {{!}}{{!}} [{{{tinklalapis}}}]
+{{!}}-
+}}
+{{#if:{{{globejas|}}}|
+{{!}} '''Miesto globėjas(-ai):''' {{!}}{{!}} {{{globejas}}}
+{{!}}-
+}}
+{{#ifeq:{{{UNESCO id|}}}|||
+{{!}}-
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+{{!}}[[Vaizdas:World Heritage Emblem.jpg|20px|UNESCO vėliava|link=Pasaulio paveldo sąrašas]] '''[[Pasaulio paveldo sąrašas|UNESCO]]'''
+{{!}}align="center" style="background:#ffffff" {{!}} [http://whc.unesco.org/en/list/{{{UNESCO id|}}} (angl.)] [http://whc.unesco.org/fr/list/{{{UNESCO id|}}} (pranc.)]: {{{UNESCO id}}}<includeonly>[[Kategorija:Pasaulio paveldo sąrašas]]</includeonly>
+{{!}}-
+}}
+{{#ifeq:{{{geoname|}}}|||
+{{!}} [[GeoName]] kodas {{!}}{{!}} {{{geoname|}}}
+{{!}}-
+}}
+{{#ifeq:{{{Flickr|}}}{{{YouTube|}}}{{{YouTube2|}}}{{{paveikslėlis-2|}}}{{{paveikslėlis-3|}}}{{{paveikslėlis-4|}}}{{{paveikslėlis-5|}}}{{{paveikslėlis-6|}}}|||
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+}}
+{{#ifeq:{{{Flickr|}}}|||
+{{!}}-
+{{!}} align="center" colspan="2" style="text-align:center;" {{!}}
+{{#widget:FlickrShow
+|query={{{Flickr|}}}
+|width={{{vaizdo plotis|{{{plotis|350}}}px}}}
+|height=220
+}}{{#ifeq:{{{Flickr tekstas|}}}|||<br /><small>''{{{Flickr tekstas}}}''</small>}}
+{{!}}-
+}}
+{{#ifeq:{{{YouTube|}}}|||
+{{!}}-
+{{!}} align="center" colspan="2" style="text-align:center;" {{!}}
+{{#widget:YouTube
+|id={{{YouTube|}}}
+|width={{{vaizdo plotis|{{{plotis|350}}}px}}}
+|height=220
+}}
+{{#ifeq:{{{YouTube tekstas|}}}|||<br />
+{{{YouTube tekstas}}}}}
+{{!}}-
+}}
+{{#ifeq:{{{YouTube2|}}}|||
+{{!}}-
+{{!}} align="center" colspan="2" style="text-align:center;" {{!}}
+{{#widget:YouTube
+|id={{{YouTube2|}}}
+|width={{{vaizdo plotis|{{{plotis|350}}}px}}}
+|height=220
+}}{{#ifeq:{{{YouTube2 tekstas|}}}|||<br /><small>''{{{YouTube2 tekstas}}}''</small>}}
+{{!}}-
+}}
+{{#ifeq:{{{paveikslėlis-2|}}}|||
+{{!}} align="center" colspan="2" {{!}} [[Vaizdas:{{{paveikslėlis-2}}}|{{{plotis|350}}}px|]]
+{{#ifeq:{{{paveikslėlio tekstas-2|}}}|||<br /><small>''{{{paveikslėlio tekstas-2}}}''</small>}}
+{{!}}-
+}}
+{{#ifeq:{{{paveikslėlis-3|}}}|||
+{{!}} align="center" colspan="2" {{!}} [[Vaizdas:{{{paveikslėlis-3}}}|{{{plotis|350}}}px|]]
+{{#ifeq:{{{paveikslėlio tekstas-3|}}}|||<br /><small>''{{{paveikslėlio tekstas-3}}}''</small>}}
+{{!}}-
+}}
+{{#ifeq:{{{paveikslėlis-4|}}}|||
+{{!}} align="center" colspan="2" {{!}} [[Vaizdas:{{{paveikslėlis-4}}}|{{{plotis|350}}}px|]]
+{{#ifeq:{{{paveikslėlio tekstas-4|}}}|||<br /><small>''{{{paveikslėlio tekstas-4}}}''</small>}}
+{{!}}-
+}}
+{{#ifeq:{{{paveikslėlis-5|}}}|||
+{{!}} align="center" colspan="2" {{!}} [[Vaizdas:{{{paveikslėlis-5}}}|{{{plotis|350}}}px|]]
+{{#ifeq:{{{paveikslėlio tekstas-5|}}}|||<br /><small>''{{{paveikslėlio tekstas-5}}}''</small>}}
+{{!}}-
+}}
+{{#ifeq:{{{paveikslėlis-6|}}}|||
+{{!}} align="center" colspan="2" {{!}} [[Vaizdas:{{{paveikslėlis-6}}}|{{{plotis|350}}}px|]]
+{{#ifeq:{{{paveikslėlio tekstas-6|}}}|||<br /><small>''{{{paveikslėlio tekstas-6}}}''</small>}}
+{{!}}-
+}}
+{{#if:{{{vikiteka|}}}|
+{{!}}-
+! align="center" colspan="2" style="background:#e0efef;" {{!}} 
+{{!}}-
+{{!}} [[File:Commons-logo.svg|12px|link=:commons:{{{vikiteka<noinclude>|{{PAGENAME}}</noinclude>}}}]] '''Vikiteka:''' {{!}}{{!}} [[:commons:{{{vikiteka|}}}|{{{pavadinimas<includeonly>|{{PAGENAME}}</includeonly>}}}]]<span class="interProject">[[commons:{{{vikiteka<noinclude>|{{PAGENAME}}</noinclude>}}}|Vikiteka]]</span>
+{{!}}-
+}}
+|}
+<includeonly>{{#set:Page has default form=Miestas}}</includeonly><noinclude>
+{{Documentation}}
+
+Puslapiai redaguojami su forma [[Forma:Miestas]]
+[[Kategorija:Miestai|Ξ]]
+</noinclude>

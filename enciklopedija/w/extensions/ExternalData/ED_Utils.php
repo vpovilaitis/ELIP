@@ -721,7 +721,9 @@ END;
 		} elseif ( $format == 'csv with header' ) {
 			return self::getCSVData( $url_contents, true );
 		} elseif ( $format == 'json' ) {
-			return /* self::getJSONData(*/ $url_contents /* ) */;
+			return $url_contents;
+		} elseif ( $format == 'json text' ) {
+			return $url_contents;
 		} elseif ( $format == 'gff' ) {
 			return self::getGFFData( $url_contents );
 		} else {

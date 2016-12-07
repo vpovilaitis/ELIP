@@ -11,7 +11,7 @@ jsoneol.render = function ( frame )
     local aeolLt = args[1] or pargs[1] or '{}'
     local peolLt = json.decode(aeolLt)
     
-    local pheol = frame:preprocess("{{#get_web_data:url=http://eol.org/api/provider_hierarchies/1.0.json|format=json}}") or '[]'
+    local pheol = frame:preprocess("{{#get_web_data:url=http://eol.org/api/provider_hierarchies/1.0.json|format=json text}}") or '[]'
     local pheolm = json.decode(pheol)
     
     local tbl = HtmlBuilder.create()
@@ -53,7 +53,7 @@ jsoneol.render = function ( frame )
             txtl = ''
         end
         
-        local pheoltaxj = frame:preprocess("{{#get_web_data:url=http://eol.org/api/hierarchies/1.0/".. tostring(pheole.id) ..".json?cache_ttl=|format=json}}") or '{}'
+        local pheoltaxj = frame:preprocess("{{#get_web_data:url=http://eol.org/api/hierarchies/1.0/".. tostring(pheole.id) ..".json?cache_ttl=|format=json text}}") or '{}'
         local pheoltax = json.decode(pheoltaxj)
         local lab = pheole.label
         if pheoltax.source ~= nil and pheoltax.source ~= '' and pheoltax.source ~= '0' then
@@ -160,7 +160,7 @@ jsoneol._getid = function ( args )
  
     local mladb = mw.text.listToText(mw.text.split( la, " " ), "+", "+")
     local pheolidj = frame:preprocess("{{"..subst.."#get_web_data:url=http://eol.org/api/search/1.0.json?q=" ..
-        mladb .. "&page=1&exact=true&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json}}") or '{}'
+        mladb .. "&page=1&exact=true&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json text}}") or '{}'
     local pheolid = json.decode(pheolidj)
     local del = ''
     if pheolid ~= nil and pheolid.totalResults ~= 0 then
@@ -174,7 +174,7 @@ jsoneol._getid = function ( args )
     end
         
     pheolidj = frame:preprocess("{{"..subst.."#get_web_data:url=http://eol.org/api/search/1.0.json?q=" ..
-        mladb .. "&page=1&exact=false&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json}}") or '{}'
+        mladb .. "&page=1&exact=false&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json text}}") or '{}'
     pheolid = json.decode(pheolidj)
     del = ''
     if pheolid ~= nil and pheolid.totalResults ~= 0 then
@@ -194,7 +194,7 @@ jsoneol.searchinfo = function ( frame )
     local sineolm = {}
     local mladb = mw.text.listToText(mw.text.split( la, " " ), "+", "+")
     local sineolj = frame:preprocess("{{"..subst.."#get_web_data:url=http://eol.org/api/search/1.0.json?q=" ..
-        mladb .. "&page=1&exact=true&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json}}") or '{}'
+        mladb .. "&page=1&exact=true&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json text}}") or '{}'
     if sineolj ~= nil then
         --sineolm = json.decode(sineolj)
     else
@@ -212,7 +212,7 @@ jsoneol.searchinfo2 = function ( frame )
     local sineolm = {}
     local mladb = mw.text.listToText(mw.text.split( la, " " ), "+", "+")
     local sineolj = frame:preprocess("{{"..subst.."#get_web_data:url=http://eol.org/api/search/1.0.json?q=" ..
-        mladb .. "&page=1&exact=false&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json}}") or '{}'
+        mladb .. "&page=1&exact=false&filter_by_taxon_concept_id=&filter_by_hierarchy_entry_id=&filter_by_string=&cache_ttl=|format=json text}}") or '{}'
     if sineolj ~= nil then
         --sineolm = json.decode(sineolj)
     else
@@ -229,7 +229,7 @@ jsoneol.getinfo = function ( frame )
     local subst = args['subst'] or ''
     local sineolm = {}
     local sineolj = frame:preprocess("{{"..subst.."#get_web_data:url=http://eol.org/api/pages/1.0/"..eolid..
-        ".json?images=10&videos=0&sounds=0&maps=0&text=10&iucn=true&subjects=overview&licenses=all&details=true&common_names=false&synonyms=true&taxonomy=true&references=true&vetted=0&cache_ttl=|format=json}}") or '{}'
+        ".json?images=10&videos=0&sounds=0&maps=0&text=10&iucn=true&subjects=overview&licenses=all&details=true&common_names=false&synonyms=true&taxonomy=true&references=true&vetted=0&cache_ttl=|format=json text}}") or '{}'
     if sineolj ~= nil then
         --sineolm = json.decode(sineolj)
     else
@@ -246,7 +246,7 @@ jsoneol.getmedis = function ( frame )
     local subst = args['subst'] or ''
     local sineolm = {}
     local sineolj = frame:preprocess("{{"..subst.."#get_web_data:url=http://eol.org/api/hierarchy_entries/1.0/"..eolid..
-        ".json?common_names=true&synonyms=true&cache_ttl=&language=en|format=json}}") or '{}'
+        ".json?common_names=true&synonyms=true&cache_ttl=&language=en|format=json text}}") or '{}'
     if sineolj ~= nil then
         --sineolm = json.decode(sineolj)
     else

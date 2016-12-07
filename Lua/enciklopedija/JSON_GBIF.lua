@@ -93,7 +93,7 @@ gbifi.getsyn = function ( frame )
     local gbifid = args['gbifid'] or pargs['gbifid'] or ''
     local singbifm = {}
     local singbifj = frame:preprocess("{{#get_web_data:url=http://api.gbif.org/v1/species/"..gbifid..
-        "/synonyms?limit=300|format=json}}") or '{}'
+        "/synonyms?limit=300|format=json text}}") or '{}'
     if singbifj ~= nil then
         singbifm = json.decode(singbifj)
     else
@@ -101,7 +101,7 @@ gbifi.getsyn = function ( frame )
     end
 
     --return mw.dumpObject(singbifm)
-    return singbifm
+    return json.encode(singbifm)
 end
 
 return gbifi
